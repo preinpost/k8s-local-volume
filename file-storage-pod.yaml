@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: file-storage
+  labels:
+    app: file-storage
+spec:
+  volumes:
+    - name: file-storage-volume
+      persistentVolumeClaim:
+       claimName: example-local-pvc
+  containers:
+    - name: file-storage-container
+      image: nginx
+      ports:
+        - containerPort: 80
+          name: file-storage
+      volumeMounts:
+        - mountPath: "/usr/share/nginx/html"
+          name: file-storage-volume
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"

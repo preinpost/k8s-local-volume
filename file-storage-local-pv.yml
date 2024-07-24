@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: example-local-pv
+spec:
+  capacity:
+    storage: 10Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  local:
+    path: /home/ms/dev/_k8s/pv_test/filecontainer
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - localhost.localdomain
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: example-local-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-storage
+  resources:
+    requests:
+      storage: 10Gi
